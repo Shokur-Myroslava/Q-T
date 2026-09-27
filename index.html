@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phonics Fun: Q, R, S, T</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+            background-color: #e0f7fa;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 { color: #00796b; margin-bottom: 5px; }
+        .subtitle { color: #004d40; margin-bottom: 20px; }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .tab-btn {
+            padding: 12px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 12px;
+            background-color: #b2dfdb;
+            color: #004d40;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .tab-btn.active {
+            background-color: #00796b;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        .letter-group {
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 16px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .cards-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .card {
+            background: white;
+            border: 3px solid #009688;
+            border-radius: 16px;
+            padding: 15px;
+            width: 110px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card:hover { transform: scale(1.05); }
+
+        .letter-card { background-color: #ffe0b2; border-color: #ff9800; }
+
+        .letter { font-size: 44px; font-weight: bold; color: #d81b60; }
+        .emoji { font-size: 48px; line-height: 1; }
+        .word-text { font-size: 18px; font-weight: bold; color: #333; margin-top: 5px; }
+
+        /* SVG сосиски */
+        .sausage-svg {
+            width: 50px;
+            height: 50px;
+        }
+
+        /* Вікторина */
+        .quiz-container {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            display: inline-block;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .score-board {
+            font-size: 20px;
+            color: #ff8f00;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .opt-btn {
+            font-size: 28px;
+            font-weight: bold;
+            padding: 12px;
+            border: 2px solid #ff9800;
+            border-radius: 12px;
+            background-color: #fff3e0;
+            color: #e65100;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .opt-btn:hover { background-color: #ffe0b2; }
+
+        .next-btn {
+            margin-top: 15px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            display: none;
+        }
+
+        /* Читання */
+        .blend-card {
+            background: white;
+            padding: 15px;
+            border-radius: 16px;
+            margin: 15px auto;
+            max-width: 480px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .blend-word {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .sound-btn {
+            font-size: 32px;
+            font-weight: bold;
+            padding: 10px 18px;
+            background: #f3e5f5;
+            border: 2px solid #ab47bc;
+            color: #4a148c;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        .sound-btn:hover { background: #e1bee7; }
+
+        .full-word-btn {
+            font-size: 22px;
+            font-weight: bold;
+            padding: 10px 18px;
+            background: #8e24aa;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        .full-word-btn:hover { background: #7b1fa2; }
+    </style>
+</head>
+<body>
+
+    <h1>🔤 Phonics Fun</h1>
+    <div class="subtitle">Вивчаємо літери Q, R, S, T</div>
+
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="switchTab(event, 'learn')">1. Вивчення</button>
+        <button class="tab-btn" onclick="switchTab(event, 'quiz')">2. Вгадай літеру</button>
+        <button class="tab-btn" onclick="switchTab(event, 'blend')">3. Читання</button>
+    </div>
+
+    <!-- Вкладка 1: Вивчення -->
+    <div id="learn" class="tab-content active">
+        <h2>Натисни на картку, щоб прослухати звук або слово!</h2>
+        
+        <!-- Q -->
+        <div class="letter-group">
+            <div class="cards-container">
+                <div class="card letter-card" onclick="playCustomAudio('sound_q.mp3', 'q_sound')"><div class="letter">Qq</div></div>
+                <div class="card" onclick="playCustomAudio('queen.mp3', 'queen')"><div class="emoji">👸</div><div class="word-text">queen</div></div>
+                <div class="card" onclick="playCustomAudio('question.mp3', 'question')"><div class="emoji">❓</div><div class="word-text">question</div></div>
+                <div class="card" onclick="playCustomAudio('quiet.mp3', 'quiet')"><div class="emoji">🤫</div><div class="word-text">quiet</div></div>
+            </div>
+        </div>
+
+        <!-- R -->
+        <div class="letter-group">
+            <div class="cards-container">
+                <div class="card letter-card" onclick="playCustomAudio('sound_r.mp3', 'r_sound')"><div class="letter">Rr</div></div>
+                <div class="card" onclick="playCustomAudio('robot.mp3', 'robot')"><div class="emoji">🤖</div><div class="word-text">robot</div></div>
+                <div class="card" onclick="playCustomAudio('rooster.mp3', 'rooster')"><div class="emoji">🐓</div><div class="word-text">rooster</div></div>
+                <div class="card" onclick="playCustomAudio('rabbit.mp3', 'rabbit')"><div class="emoji">🐰</div><div class="word-text">rabbit</div></div>
+            </div>
+        </div>
+
+        <!-- S -->
+        <div class="letter-group">
+            <div class="cards-container">
+                <div class="card letter-card" onclick="playCustomAudio('sound_s.mp3', 's_sound')"><div class="letter">Ss</div></div>
+                <div class="card" onclick="playCustomAudio('snake.mp3', 'snake')"><div class="emoji">🐍</div><div class="word-text">snake</div></div>
+                
+                <!-- Картка з окремою сосискою -->
+                <div class="card" onclick="playCustomAudio('sausage.mp3', 'sausage')">
+                    <div class="emoji">
+                        <svg class="sausage-svg" viewBox="0 0 100 60">
+                            <path d="M 15 30 C 15 10, 85 10, 85 30 C 85 50, 15 50, 15 30 Z" fill="#d35400" stroke="#a04000" stroke-width="4" />
+                            <ellipse cx="15" cy="30" rx="3" ry="6" fill="#a04000" />
+                            <ellipse cx="85" cy="30" rx="3" ry="6" fill="#a04000" />
+                            <path d="M 30 20 C 40 18, 60 18, 70 20" stroke="#f39c12" stroke-width="3" fill="none" stroke-linecap="round" />
+                        </svg>
+                    </div>
+                    <div class="word-text">sausage</div>
+                </div>
+
+                <div class="card" onclick="playCustomAudio('sun.mp3', 'sun')"><div class="emoji">☀️</div><div class="word-text">sun</div></div>
+            </div>
+        </div>
+
+        <!-- T -->
+        <div class="letter-group">
+            <div class="cards-container">
+                <div class="card letter-card" onclick="playCustomAudio('sound_t.mp3', 't_sound')"><div class="letter">Tt</div></div>
+                <div class="card" onclick="playCustomAudio('tiger.mp3', 'tiger')"><div class="emoji">🐯</div><div class="word-text">tiger</div></div>
+                <div class="card" onclick="playCustomAudio('tomato.mp3', 'tomato')"><div class="emoji">🍅</div><div class="word-text">tomato</div></div>
+                <div class="card" onclick="playCustomAudio('train.mp3', 'train')"><div class="emoji">🚂</div><div class="word-text">train</div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Вкладка 2: Вікторина -->
+    <div id="quiz" class="tab-content">
+        <h2>Обери першу літеру для малюнка!</h2>
+        <div class="quiz-container">
+            <div class="score-board">Зірочки: <span id="stars">⭐ 0</span></div>
+            <div class="emoji" id="quiz-emoji" style="font-size: 80px; min-height: 90px; display: flex; align-items: center; justify-content: center;">👸</div>
+            <div class="word-text" id="quiz-word-hint" style="font-size: 24px; color: #666; margin: 10px 0;">...</div>
+            
+            <div class="quiz-options">
+                <button class="opt-btn" onclick="checkAnswer('q')">Q</button>
+                <button class="opt-btn" onclick="checkAnswer('r')">R</button>
+                <button class="opt-btn" onclick="checkAnswer('s')">S</button>
+                <button class="opt-btn" onclick="checkAnswer('t')">T</button>
+            </div>
+            <h3 id="quiz-result" style="height: 30px;"></h3>
+            <button class="next-btn" id="next-btn" onclick="nextQuestion()">Наступне слово ➡️</button>
+        </div>
+    </div>
+
+    <!-- Вкладка 3: Читання -->
+    <div id="blend" class="tab-content">
+        <h2>Натискай на окремі звуки, а потім прослухай все слово!</h2>
+        
+        <!-- top -->
+        <div class="blend-card">
+            <div class="blend-word">
+                <button class="sound-btn" onclick="playCustomAudio('sound_t.mp3', 't_sound')">t</button>
+                <button class="sound-btn" onclick="playCustomAudio('sound_o.mp3', 'o_sound')">o</button>
+                <button class="sound-btn" onclick="playCustomAudio('sound_p.mp3', 'p_sound')">p</button>
+                <span style="font-size: 28px;">=</span>
+                <button class="full-word-btn" onclick="playCustomAudio('top.mp3', 'top')">🔊 top</button>
+            </div>
+        </div>
+
+        <!-- corn -->
+        <div class="blend-card">
+            <div class="blend-word">
+                <button class="sound-btn" onclick="playCustomAudio('sound_c.mp3', 'c_sound')">c</button>
+                <button class="sound-btn" onclick="playCustomAudio('sound_o.mp3', 'o_sound')">o</button>
+                <button class="sound-btn" onclick="playCustomAudio('sound_r.mp3', 'r_sound')">r</button>
+                <button class="sound-btn" onclick="playCustomAudio('sound_n.mp3', 'n_sound')">n</button>
+                <span style="font-size: 28px;">=</span>
+                <button class="full-word-btn" onclick="playCustomAudio('corn.mp3', 'corn')">🔊 corn</button>
+            </div>
+        </div>
+
+        <!-- robot -->
+        <div class="blend-card">
+            <div class="blend-word">
+                <button class="sound-btn" onclick="playCustomAudio('sound_r.mp3', 'r_sound')">r</button>
+                <button class="sound-btn" onclick="playCustomAudio('sound_o.mp3', 'o_sound')">o</button>
+                <button class="sound-btn" onclick="playCustomAudio('sound_b.mp3', 'b_sound')">b</button>
+                <button class="sound-btn" onclick="playCustomAudio('sound_o.mp3', 'o_sound')">o</button>
+                <button class="sound-btn" onclick="playCustomAudio('sound_t.mp3', 't_sound')">t</button>
+                <span style="font-size: 28px;">=</span>
+                <button class="full-word-btn" onclick="playCustomAudio('robot.mp3', 'robot')">🔊 robot</button>
+            </div>
+        </div>
+
+        <!-- frog -->
+        <div class="blend-card">
+            <div class="blend-word">
+                <button class="sound-btn" onclick="playCustomAudio('sound_f.mp3', 'f_sound')">f</button>
+                <button class="sound-btn" onclick="playCustomAudio('sound_r.mp3', 'r_sound')">r</button>
+                <button class="sound-btn" onclick="playCustomAudio('sound_o.mp3', 'o_sound')">o</button>
+                <button class="sound-btn" onclick="playCustomAudio('sound_g.mp3', 'g_sound')">g</button>
+                <span style="font-size: 28px;">=</span>
+                <button class="full-word-btn" onclick="playCustomAudio('frog.mp3', 'frog')">🔊 frog</button>
+            </div>
+        </div>
+
+        <!-- red -->
+        <div class="blend-card">
+            <div class="blend-word">
+                <button class="sound-btn" onclick="playCustomAudio('sound_r.mp3', 'r_sound')">r</button>
+                <button class="sound-btn" onclick="playCustomAudio('sound_e.mp3', 'e_sound')">e</button>
+                <button class="sound-btn" onclick="playCustomAudio('sound_d.mp3', 'd_sound')">d</button>
+                <span style="font-size: 28px;">=</span>
+                <button class="full-word-btn" onclick="playCustomAudio('red.mp3', 'red')">🔊 red</button>
+            </div>
+        </div>
+
+        <!-- hat -->
+        <div class="blend-card">
+            <div class="blend-word">
+                <button class="sound-btn" onclick="playCustomAudio('sound_h.mp3', 'h_sound')">h</button>
+                <button class="sound-btn" onclick="playCustomAudio('sound_a.mp3', 'a_sound')">a</button>
+                <button class="sound-btn" onclick="playCustomAudio('sound_t.mp3', 't_sound')">t</button>
+                <span style="font-size: 28px;">=</span>
+                <button class="full-word-btn" onclick="playCustomAudio('hat.mp3', 'hat')">🔊 hat</button>
+            </div>
+        </div>
+
+        <!-- pot -->
+        <div class="blend-card">
+            <div class="blend-word">
+                <button class="sound-btn" onclick="playCustomAudio('sound_p.mp3', 'p_sound')">p</button>
+                <button class="sound-btn" onclick="playCustomAudio('sound_o.mp3', 'o_sound')">o</button>
+                <button class="sound-btn" onclick="playCustomAudio('sound_t.mp3', 't_sound')">t</button>
+                <span style="font-size: 28px;">=</span>
+                <button class="full-word-btn" onclick="playCustomAudio('pot.mp3', 'pot')">🔊 pot</button>
+            </div>
+        </div>
+
+        <!-- list -->
+        <div class="blend-card">
+            <div class="blend-word">
+                <button class="sound-btn" onclick="playCustomAudio('sound_l.mp3', 'l_sound')">l</button>
+                <button class="sound-btn" onclick="playCustomAudio('sound_i.mp3', 'i_sound')">i</button>
+                <button class="sound-btn" onclick="playCustomAudio('sound_s.mp3', 's_sound')">s</button>
+                <button class="sound-btn" onclick="playCustomAudio('sound_t.mp3', 't_sound')">t</button>
+                <span style="font-size: 28px;">=</span>
+                <button class="full-word-btn" onclick="playCustomAudio('list.mp3', 'list')">🔊 list</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const sausageSVG = `<svg class="sausage-svg" viewBox="0 0 100 60"><path d="M 15 30 C 15 10, 85 10, 85 30 C 85 50, 15 50, 15 30 Z" fill="#d35400" stroke="#a04000" stroke-width="4"/><ellipse cx="15" cy="30" rx="3" ry="6" fill="#a04000"/><ellipse cx="85" cy="30" rx="3" ry="6" fill="#a04000"/><path d="M 30 20 C 40 18, 60 18, 70 20" stroke="#f39c12" stroke-width="3" fill="none" stroke-linecap="round"/></svg>`;
+
+        const quizData = [
+            { emoji: '👸', word: 'queen', letter: 'q', file: 'queen.mp3' },
+            { emoji: '❓', word: 'question', letter: 'q', file: 'question.mp3' },
+            { emoji: '🤫', word: 'quiet', letter: 'q', file: 'quiet.mp3' },
+            { emoji: '🤖', word: 'robot', letter: 'r', file: 'robot.mp3' },
+            { emoji: '🐓', word: 'rooster', letter: 'r', file: 'rooster.mp3' },
+            { emoji: '🐰', word: 'rabbit', letter: 'r', file: 'rabbit.mp3' },
+            { emoji: '🐍', word: 'snake', letter: 's', file: 'snake.mp3' },
+            { emoji: sausageSVG, word: 'sausage', letter: 's', file: 'sausage.mp3' },
+            { emoji: '☀️', word: 'sun', letter: 's', file: 'sun.mp3' },
+            { emoji: '🐯', word: 'tiger', letter: 't', file: 'tiger.mp3' },
+            { emoji: '🍅', word: 'tomato', letter: 't', file: 'tomato.mp3' },
+            { emoji: '🚂', word: 'train', letter: 't', file: 'train.mp3' }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let currentAudio = null;
+
+        function playCustomAudio(filePath, fallbackText) {
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
+            }
+            window.speechSynthesis.cancel();
+
+            let audio = new Audio(filePath);
+            audio.play().then(() => {
+                currentAudio = audio;
+            }).catch(() => {
+                speakFallback(fallbackText);
+            });
+        }
+
+        function speakFallback(typeOrText) {
+            let soundText = typeOrText;
+            if (typeOrText === 'q_sound') soundText = "kwuh";
+            if (typeOrText === 'r_sound') soundText = "err";
+            if (typeOrText === 's_sound') soundText = "sss";
+            if (typeOrText === 't_sound') soundText = "tuh";
+            if (typeOrText === 'c_sound') soundText = "kuh";
+            if (typeOrText === 'o_sound') soundText = "oh";
+            if (typeOrText === 'n_sound') soundText = "nn";
+            if (typeOrText === 'b_sound') soundText = "buh";
+            if (typeOrText === 'f_sound') soundText = "fff";
+            if (typeOrText === 'g_sound') soundText = "guh";
+            if (typeOrText === 'e_sound') soundText = "eh";
+            if (typeOrText === 'd_sound') soundText = "duh";
+            if (typeOrText === 'h_sound') soundText = "huh";
+            if (typeOrText === 'a_sound') soundText = "ah";
+            if (typeOrText === 'p_sound') soundText = "puh";
+            if (typeOrText === 'l_sound') soundText = "luh";
+            if (typeOrText === 'i_sound') soundText = "ih";
+
+            const utterance = new SpeechSynthesisUtterance(soundText);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.85;
+            utterance.pitch = 1.1;
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function switchTab(evt, tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            if (evt && evt.currentTarget) {
+                evt.currentTarget.classList.add('active');
+            }
+
+            if (tabId === 'quiz') {
+                initQuiz();
+            }
+        }
+
+        function initQuiz() {
+            quizData.sort(() => Math.random() - 0.5);
+            currentQuestionIndex = 0;
+            score = 0;
+            document.getElementById('stars').innerText = `⭐ ${score}`;
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const q = quizData[currentQuestionIndex];
+            document.getElementById('quiz-emoji').innerHTML = q.emoji;
+            document.getElementById('quiz-word-hint').innerText = "???";
+            document.getElementById('quiz-result').innerText = "";
+            document.getElementById('next-btn').style.display = "none";
+            
+            playCustomAudio(q.file, q.word);
+        }
+
+        function checkAnswer(selectedLetter) {
+            const q = quizData[currentQuestionIndex];
+            const result = document.getElementById('quiz-result');
+
+            if (selectedLetter === q.letter) {
+                result.innerText = "Правильно! 🎉";
+                result.style.color = "#2e7d32";
+                document.getElementById('quiz-word-hint').innerText = q.word;
+                score++;
+                document.getElementById('stars').innerText = `⭐ ${score}`;
+                document.getElementById('next-btn').style.display = "inline-block";
+            } else {
+                result.innerText = "Спробуй ще раз! ❌";
+                result.style.color = "#c62828";
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizData.length) {
+                showQuestion();
+            } else {
+                document.getElementById('quiz-emoji').innerText = "🏆";
+                document.getElementById('quiz-word-hint').innerText = "Чудова робота!";
+                document.getElementById('quiz-result').innerText = `Ти пройшов усі слова й зібрав ${score} зірочок!`;
+                document.getElementById('next-btn').style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
